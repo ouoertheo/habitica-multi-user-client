@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="stylesheet.css">
+	<link rel="stylesheet" href="custom.css">
+	<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js">
+	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js">
+	</script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js">
+	</script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js">
+	</script>
+	<script src="apiService.js">
+	</script>
+	<script src="habitica.js">
+	</script>
+	<script src="notification.js">
+	</script>
+</head>
+
+<body ng-app="habitica" ng-controller="HabiticaController as habitica">
+
+	<div class="container">
+		<div notifications="bottom right"></div>
+		<div class="row">
+			<div class="col-sm">
+				<h2 class="text-center">Habitica</h2>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm" ng-repeat="user in users">
+				<div class="card">
+					<div class="card">
+						<div class="card-header">
+							<h2 class="text-center">{{user.name}}</h2>
+						</div>
+						<div class="card-body">
+                Health: 
+								<div class="progress" style="height: 20pt">
+									<div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: {{user.account.stats.hp/user.account.stats.maxHealth*100}}%"
+									 aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+										{{user.account.stats.hp/user.account.stats.maxHealth*100 | number : 0}}
+									</div>
+								</div>
+                Experience: 
+								<div class="progress" style="height: 20pt">
+									<div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: {{user.account.stats.exp/user.account.stats.toNextLevel*100}}%"
+									 aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+										{{user.account.stats.exp  | number : 0}}/{{user.account.stats.toNextLevel}}
+									</div>
+								</div>
+								Gold: {{user.account.stats.gp | number : 0}}
+							</div>
+						<div class="card">
+							<div class="card-header">
+								Habits
+							</div>
+							<div class="card-body">
+								<div class="list-group" ng-repeat="habit in user.habits">
+									<div class="btn-group btn-group-lg border border-secondary rounded d-flex">
+										<button type="button" class="btn btn-success btn-wide" ng-disabled="{{!habit.up}}" ng-click="action(habit.id,'up',user.name)"> + </button>
+                  <div class="btn-wide-text text-center">{{habit.text}}</div>
+                  <button type="button" class="btn btn-danger btn-wide" ng-disabled="{{!habit.down}}" ng-click="action(habit.id,'down',user.name)"> - </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              Tasks
+            </div>
+            <div class="card-body">
+              <div class="list-group" ng-repeat="todo in user.todos">
+                <div class="btn-group btn-group-lg border border-secondary rounded d-flex">
+                  <button type="button" class="btn btn-success btn-wide" ng-click="action(todo.id,'up',user.name)"> O </button>
+                  <div class="btn-wide-text text-center">{{todo.text}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              Rewards
+            </div>
+            <div class="card-body">
+              <div class="list-group" ng-repeat="reward in user.rewards">
+                <div class="btn-group btn-group-lg border border-secondary rounded d-flex">
+                  <div class="btn-wide-text text-center">{{reward.text}}</div>
+                  <button type="button" class="btn btn-info" style="width: 100pt" ng-click="action(reward.id,'down',user.name)"> {{reward.value}} </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
