@@ -1,5 +1,5 @@
-var habitica = angular.module('habitica', ['ApiService']);
-habitica.controller('HabiticaController', function($scope, $http, api) {
+var habitica = angular.module('habitica', ['ApiService','ui-notification']);
+habitica.controller('HabiticaController', function($scope, $http, api, Notification) {
 
   $scope.users = {
     'Emily':{
@@ -43,9 +43,26 @@ habitica.controller('HabiticaController', function($scope, $http, api) {
 
   //Perform action on tasks and update
   $scope.action = function(taskid, action, user){
-    api.TaskAction(taskid, action, $scope.users[user].authHeaders).then(function(){
+    api.TaskAction(taskid, action, $scope.users[user].authHeaders).then(function(data){
+	  var expDelta = (data.exp - $scope.users[user].account.stats.exp);
+	  var healthDelta = (data.hp - $scope.users[user].account.stats.hp);
+	  var gpDelta = Math.round(data.gp - $scope.users[user].account.stats.gp);
+	  var statMessage = (expDelta ? "Exp: " + expDelta + " | ":"")
+		+ (healthDelta ? "HP: " +  healthDelta:"")
+		+ (gpDelta ? " | GP: " +  gpDelta:"");
+	  Notification({message: statMessage, delay: 5000});
       $scope.RefreshUser($scope.users[user]);
     });
+  }
+  
+  $scope.message = function(){
+	  var expDelta = $scope.users["Emily"].account.stats.exp;
+	  var healthDelta = $scope.users["Emily"].account.stats.hp;
+	  var gpDelta = Math.round($scope.users["Emily"].account.stats.gp);
+	  var statMessage = (expDelta ? "Exp: " + expDelta + " | ":"")
+		+ (healthDelta ? "HP: " +  healthDelta:"")
+		+ (gpDelta ? " | GP: " +  gpDelta:"");
+	  Notification({message: statMessage, delay: 5000});
   }
 
 });

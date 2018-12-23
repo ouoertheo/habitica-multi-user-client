@@ -6,21 +6,15 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="stylesheet.css">
 	<link rel="stylesheet" href="custom.css">
+	<link rel="stylesheet" href="angular-ui-notification.css">
 	<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js">
 	</script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js">
-	</script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js">
-	</script>
-
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js">
-	</script>
-	<script src="apiService.js">
-	</script>
-	<script src="habitica.js">
-	</script>
-	<script src="notification.js">
-	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	<script src="apiService.js"></script>
+	<script src="habitica.js"></script>
+	<script src="notifications.js"></script>
 </head>
 
 <body ng-app="habitica" ng-controller="HabiticaController as habitica">
@@ -40,22 +34,34 @@
 							<h2 class="text-center">{{user.name}}</h2>
 						</div>
 						<div class="card-body">
-                Health: 
-								<div class="progress" style="height: 20pt">
-									<div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: {{user.account.stats.hp/user.account.stats.maxHealth*100}}%"
-									 aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
-										{{user.account.stats.hp/user.account.stats.maxHealth*100 | number : 0}}
-									</div>
+							Health: 
+							<div class="progress" style="height: 20pt">
+								<div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: {{user.account.stats.hp/user.account.stats.maxHealth*100}}%"
+								 aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+									{{user.account.stats.hp | number : 0}}
 								</div>
-                Experience: 
-								<div class="progress" style="height: 20pt">
-									<div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: {{user.account.stats.exp/user.account.stats.toNextLevel*100}}%"
-									 aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
-										{{user.account.stats.exp  | number : 0}}/{{user.account.stats.toNextLevel}}
-									</div>
-								</div>
-								Gold: {{user.account.stats.gp | number : 0}}
 							</div>
+							Experience: 
+							<div class="progress" style="height: 20pt">
+								<div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: {{user.account.stats.exp/user.account.stats.toNextLevel*100}}%"
+								 aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+									{{user.account.stats.exp  | number : 0}}/{{user.account.stats.toNextLevel}}
+								</div>
+							</div>
+							<br>
+							<div class="d-flex justify-content-center">
+								<div class="card bg-light">
+									<div class="card-body"> 
+										Level: {{user.account.stats.lvl}}
+									</div>
+								</div>
+								<div class="card bg-light">
+									<div class="card-body"> 
+										Gold: {{user.account.stats.gp | number : 0}}
+									</div>
+								</div>
+							</div>
+						</div>
 						<div class="card">
 							<div class="card-header">
 								Habits
@@ -64,7 +70,7 @@
 								<div class="list-group" ng-repeat="habit in user.habits">
 									<div class="btn-group btn-group-lg border border-secondary rounded d-flex">
 										<button type="button" class="btn btn-success btn-wide" ng-disabled="{{!habit.up}}" ng-click="action(habit.id,'up',user.name)"> + </button>
-                  <div class="btn-wide-text text-center">{{habit.text}}</div>
+                  <div class="btn-wide-text text-center">{{habit.text + " ( + " + habit.counterUp + " - " + habit.counterDown + " )"}}</div>
                   <button type="button" class="btn btn-danger btn-wide" ng-disabled="{{!habit.down}}" ng-click="action(habit.id,'down',user.name)"> - </button>
                 </div>
               </div>
